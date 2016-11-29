@@ -1,6 +1,6 @@
 {
   "name": "promiset",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "A minimal and fast promise implementation",
   "author": "Ruben Verborgh <quanruzhuoxiu@gmail.com>",
   "license": "MIT",
