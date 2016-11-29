@@ -136,4 +136,25 @@
       });
     });
   };
+  Promise.serial = function (promises) {
+    // initial value
+    var result = Promise.resolve();
+    // final resolve result array
+    var values = [];
+    for(var i = 0, len = promises.length; i < len; i++) {
+      (function (index) {
+        result = result.then(function (value) {
+          values.push(value);
+          return promises[index](value);
+        });
+      })(i);
+    }
+
+    return result.then(function (value) {
+      values.push(value);
+      return values.slice(1);
+    }, function (err) {
+      return Promise.reject(err);
+    });
+  }
 })('f', 'o');

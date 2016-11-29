@@ -1,17 +1,17 @@
 {
-  "name": "promiscuous",
-  "version": "0.6.0",
+  "name": "promiset",
+  "version": "0.8.0",
   "description": "A minimal and fast promise implementation",
-  "author": "Ruben Verborgh <ruben.verborgh@gmail.com>",
+  "author": "Ruben Verborgh <quanruzhuoxiu@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RubenVerborgh/promiscuous.git"
+    "url": "https://github.com/quanru/promiscuous.git"
   },
   "bugs": {
-    "url": "https://github.com/RubenVerborgh/promiscuous/issues"
+    "url": "https://github.com/quanru/promiscuous/issues"
   },
-  "main": "promiscuous.js",
+  "main": "promiset.js",
   "scripts": {
     "test": "promises-aplus-tests test/adapter"
   },

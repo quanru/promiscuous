@@ -1,29 +1,29 @@
-# promiscuous
+# promiset
 <a href="http://promises-aplus.github.com/promises-spec">
   <img src="http://promises-aplus.github.com/promises-spec/assets/logo-small.png"
        alt="Promises/A+ logo" title="Promises/A+ 1.0 compliant" align="right" />
 </a>
 
-promiscuous is a tiny implementation of the [Promises/A+ spec](http://promises-aplus.github.com/promises-spec/).
+promiset is a tiny implementation of the [Promises/A+ spec](http://promises-aplus.github.com/promises-spec/).
 
-It is promise library in JavaScript, **small** (< 1kb [minified](https://raw.github.com/RubenVerborgh/promiscuous/dist/promiscuous-node.js) / < 0.6kb gzipped) and **fast**.
+It is promise library in JavaScript, **small** (< 1kb [minified](https://raw.github.com/RubenVerborgh/promiset/dist/promiset-node.js) / < 0.6kb gzipped) and **fast**.
 
 ## Installation and usage
 ### Node
-First, install promiscuous with npm.
+First, install promiset with npm.
 ```bash
-$ npm install promiscuous
+$ npm install promiset
 ```
 
-Then, include promiscuous in your code file.
+Then, include promiset in your code file.
 ```javascript
-var Promise = require('promiscuous');
+var Promise = require('promiset');
 ```
 
 ### Browsers
-Include [promiscuous](https://raw.github.com/RubenVerborgh/promiscuous/dist/promiscuous-browser.js) in your HTML file.
+Include [promiset](https://raw.github.com/quanru/promiscuous/dist/promiset-browser.js) in your HTML file.
 ```html
-<script src="promicuous-browser.js"></script>
+<script src="promiset-browser.js"></script>
 ```
 
 This version (and a minified one) can be built with:
@@ -80,5 +80,19 @@ promiseLater(null).then(
 ```javascript
 var promises = [promiseLater(1), promiseLater(2), promiseLater(3)];
 Promise.all(promises).then(function (values) { console.log(values); });
+/* [1, 2, 3] */
+```
+
+### Execute an array of promises, returns a promise that resolves or rejects as soon as one of the promises in the iterable resolves or rejects, with the value or reason from that promise.
+```javascript
+var promises = [promiseLater(1), promiseLater(2), promiseLater(3)];
+Promise.race(promises).then(function (values) { console.log(values); });
+/* 1 */
+```
+
+### Execute an array of promises serially, returns a promise with array contain the value of every resolved promise, but it will reject if any of the promises is rejected.
+```javascript
+var promises = [promiseLater(1), promiseLater(2), promiseLater(3)];
+Promise.race(promises).then(function (values) { console.log(values); });
 /* [1, 2, 3] */
 ```
