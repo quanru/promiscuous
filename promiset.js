@@ -75,7 +75,9 @@
 
   // Finalizes the promise by resolving/rejecting it with the transformed value
   function finalize(promise, resolve, reject, value, transform) {
-    setImmediate(function () {
+    var mySetImmediate = setImmediate ? setImmediate : setTimeout;
+    
+    mySetImmediate(function () {
       try {
         // Transform the value through and check whether it's a promise
         value = transform(value);

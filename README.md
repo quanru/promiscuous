@@ -93,6 +93,6 @@ Promise.race(promises).then(function (values) { console.log(values); });
 ### Execute an array of promises serially, returns a promise with array contain the value of every resolved promise, but it will reject if any of the promises is rejected.
 ```javascript
 var promises = [promiseLater(1), promiseLater(2), promiseLater(3)];
-Promise.race(promises).then(function (values) { console.log(values); });
+Promise.serial(promises).then(function (values) { console.log(values); });
 /* [1, 2, 3] */
 ```
