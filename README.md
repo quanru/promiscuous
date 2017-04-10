@@ -90,9 +90,47 @@ Promise.race(promises).then(function (values) { console.log(values); });
 /* 1 */
 ```
 
-### Execute an array of promises serially, returns a promise with array contain the value of every resolved promise, but it will reject if any of the promises is rejected.
+### Execute an array of tasks which return a promise serially, returns a promise with array contain the value of every resolved promise in the task function, but it will reject if any of the promises is rejected.
 ```javascript
-var promises = [promiseLater(1), promiseLater(2), promiseLater(3)];
+var task1 = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('task1');
+      resolve('task1');
+    }, 2000);
+  })
+}
+
+var task2 = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('task2');
+      resolve('task2');
+    }, 2000);
+  })
+}
+
+var task3 = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('task3');
+      resolve('task3');
+    }, 3000);
+  })
+}
+
+Promise.serial([task1, task2, task3])
+  .then(data => {
+    console.log('data:', data);
+  })
+  .catch(err => {
+    console.log('err', err);
+  })
+
+var promises = [task1, task2, task3];
 Promise.serial(promises).then(function (values) { console.log(values); });
-/* [1, 2, 3] */
+/* task1
+   task2
+   task3
+   data: ["task1", "task2", "task3"] */
 ```

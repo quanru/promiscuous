@@ -10,9 +10,9 @@
     // 2) handle a resolve or reject call (if the first argument === `is`)
     // Before 2), `handler` holds a queue of callbacks.
     // After 2), `handler` is a finalized .then handler.
-    handler = function pendingHandler(resolved, rejected, value, queue, then, i) {
+    handler = function pendingHandler(resolved, rejected, value, queue, then, i, thenable) {
+      if(!thenable) value = value[0]
       queue = pendingHandler.q;
-
       // Case 1) handle a .then(resolved, rejected) call
       if (resolved != is) {
         return Promise(function (resolve, reject) {
@@ -33,7 +33,7 @@
       // If the value is a promise, take over its state
       if (is(func, then)) {
         function valueHandler(resolved) {
-          return function (value) { then && (then = 0, pendingHandler(is, resolved, value)); };
+          return function (value) { then && (then = 0, pendingHandler(is, resolved, value, undefined, undefined, undefined, true)); };
         }
         try { then.call(value, valueHandler(1), rejected = valueHandler(0)); }
         catch (reason) { rejected(reason); }
@@ -41,13 +41,13 @@
       // The value is not a promise; handle resolve/reject
       else {
         // Replace this handler with a finalized resolved/rejected handler
-        handler = function (Resolved, Rejected) {
+        handler = function (Resolved, Rejected, isSpread) {
           // If the Resolved or Rejected parameter is not a function,
           // return the original promise (now stored in the `callback` variable)
           if (!is(func, (Resolved = rejected ? Resolved : Rejected)))
             return callback;
           // Otherwise, return a finalized promise, transforming the value with the function
-          return Promise(function (resolve, reject) { finalize(this, resolve, reject, value, Resolved); });
+          return Promise(function (resolve, reject) { finalize(this, resolve, reject, value, Resolved, isSpread); });
         };
         // Resolve/reject pending callbacks
         i = 0;
@@ -64,23 +64,27 @@
     };
     // The queue of pending callbacks; garbage-collected when handler is resolved/rejected
     handler.q = [];
-
     // Create and return the promise (reusing the callback variable)
-    callback.call(callback = { then:    function (resolved, rejected) { return handler(resolved, rejected); },
-                               "catch": function (rejected)           { return handler(0,        rejected); } },
-                  function (value)  { handler(is, 1,  value); },
-                  function (reason) { handler(is, 0, reason); });
+    callback.call(callback = { then: function (resolved, rejected) { return handler(resolved, rejected, false); },
+                               spread: function(resolved, rejected) { return handler(resolved, rejected, true); },
+                               catch: function (rejected) { return handler(0, rejected); } },
+                  function ()  { handler(is, 1,  arguments); },
+                  function () { handler(is, 0, arguments); });
     return callback;
   }
 
   // Finalizes the promise by resolving/rejecting it with the transformed value
-  function finalize(promise, resolve, reject, value, transform) {
+  function finalize(promise, resolve, reject, value, transform, isSpread) {
     var mySetImmediate = setImmediate ? setImmediate : setTimeout;
-    
     mySetImmediate(function () {
       try {
         // Transform the value through and check whether it's a promise
-        value = transform(value);
+        if(isSpread) {
+          value = Array.isArray(value) ? transform(...value) : transform(value);
+        } else {
+          value = transform(value);
+        }
+
         transform = value && (is(obj, value) | is(func, value)) && value.then;
         // Return the result if it's not a promise
         if (!is(func, transform))
@@ -158,5 +162,5 @@
     }, function (err) {
       return Promise.reject(err);
     });
-  }
+  };
 })('f', 'o');

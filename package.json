@@ -1,6 +1,6 @@
 {
   "name": "promiset",
-  "version": "0.8.1",
+  "version": "0.8.3",
   "description": "A minimal and fast promise implementation",
   "author": "Ruben Verborgh <quanruzhuoxiu@gmail.com>",
   "license": "MIT",
@@ -11,11 +11,14 @@
   "bugs": {
     "url": "https://github.com/quanru/promiscuous/issues"
   },
-  "main": "promiset.js",
+  "main": "index.js",
   "scripts": {
-    "test": "promises-aplus-tests test/adapter"
+    "test": "promises-aplus-tests test/adapter",
+    "babel": "babel src -d lib -D"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-latest": "^6.24.1",
     "promises-aplus-tests": "2.0.x",
     "uglify-js": "2.2.x"
   }
