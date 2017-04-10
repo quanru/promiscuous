@@ -76,6 +76,16 @@ promiseLater(null).then(
 /* nothing */
 ```
 
+### .spread fulfillment value
+Like calling .then, but the fulfillment value could be an array, which is flattened to the formal parameters of the fulfillment handler.
+
+```javascript
+Promise.resolve([1,2]).spread((a, b) => console.log(a, b))
+/* 1 2 */
+Promise.resolve(1).spread(a => console.log(a))
+/* 1 */
+```
+
 ### Convert an array of promises into a promise for an array
 ```javascript
 var promises = [promiseLater(1), promiseLater(2), promiseLater(3)];
