@@ -10,8 +10,7 @@
     // 2) handle a resolve or reject call (if the first argument === `is`)
     // Before 2), `handler` holds a queue of callbacks.
     // After 2), `handler` is a finalized .then handler.
-    handler = function pendingHandler(resolved, rejected, value, queue, then, i, thenable) {
-      if(!thenable) value = value[0]
+    handler = function pendingHandler(resolved, rejected, value, queue, then, i) {
       queue = pendingHandler.q;
       // Case 1) handle a .then(resolved, rejected) call
       if (resolved != is) {
@@ -33,7 +32,7 @@
       // If the value is a promise, take over its state
       if (is(func, then)) {
         function valueHandler(resolved) {
-          return function (value) { then && (then = 0, pendingHandler(is, resolved, value, undefined, undefined, undefined, true)); };
+          return function (value) { then && (then = 0, pendingHandler(is, resolved, value)); };
         }
         try { then.call(value, valueHandler(1), rejected = valueHandler(0)); }
         catch (reason) { rejected(reason); }
@@ -68,8 +67,8 @@
     callback.call(callback = { then: function (resolved, rejected) { return handler(resolved, rejected, false); },
                                spread: function(resolved, rejected) { return handler(resolved, rejected, true); },
                                catch: function (rejected) { return handler(0, rejected); } },
-                  function ()  { handler(is, 1,  arguments); },
-                  function () { handler(is, 0, arguments); });
+                  function (value)  { handler(is, 1,  value); },
+                  function (value) { handler(is, 0, value); });
     return callback;
   }
 
@@ -79,16 +78,15 @@
     mySetImmediate(function () {
       try {
         // Transform the value through and check whether it's a promise
-        if(isSpread) {
+        if(isSpread)
           value = Array.isArray(value) ? transform(...value) : transform(value);
-        } else {
+        else
           value = transform(value);
-        }
 
         transform = value && (is(obj, value) | is(func, value)) && value.then;
         // Return the result if it's not a promise
         if (!is(func, transform))
-          resolve(value);
+          resolve(value)
         // If it's a promise, make sure it's not circular
         else if (value == promise)
           reject(TypeError());
