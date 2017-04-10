@@ -1,6 +1,6 @@
 {
   "name": "promiset",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "A minimal and fast promise implementation",
   "author": "Ruben Verborgh <quanruzhuoxiu@gmail.com>",
   "license": "MIT",
@@ -21,6 +21,7 @@
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-preset-latest": "^6.24.1",
+    "husky": "^0.13.3",
     "promises-aplus-tests": "2.0.x",
     "uglify-js": "2.2.x"
   }
