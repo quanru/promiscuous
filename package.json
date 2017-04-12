@@ -14,8 +14,8 @@
   "main": "index.js",
   "scripts": {
     "test": "promises-aplus-tests test/adapter",
-    "babel": "babel src -d lib -D",
-    "prepublish": "npm run babel",
+    "compile": "babel src -d lib -D",
+    "prepublish": "npm run compile",
     "precommit": "npm run test"
   },
   "devDependencies": {

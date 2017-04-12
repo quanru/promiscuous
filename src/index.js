@@ -15,7 +15,7 @@
       // Case 1) handle a .then(resolved, rejected) call
       if (resolved != is) {
         return Promise(function (resolve, reject) {
-          queue.push({ p: this, r: resolve, j: reject, 1: resolved, 0: rejected });
+          queue.push({ p: this, r: resolve, j: reject, 1: resolved, 0: rejected, isSpread: value });
         });
       }
 
@@ -57,7 +57,7 @@
             (rejected ? then.r : then.j)(value);
           // Otherwise, resolve/reject the promise with the result of the callback
           else
-            finalize(then.p, then.r, then.j, value, resolved);
+            finalize(then.p, then.r, then.j, value, resolved, then.isSpread);
         }
       }
     };
